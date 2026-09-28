@@ -1,0 +1,23 @@
+<div class="login-container">
+  <h1>Iniciar sesión</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label>
+      Usuario
+      <input type="text" formControlName="username" autocomplete="username" />
+    </label>
+
+    <label>
+      Contraseña
+      <input type="password" formControlName="password" autocomplete="current-password" />
+    </label>
+
+    @if (viewModel.errorMessage()) {
+      <p class="error">{{ viewModel.errorMessage() }}</p>
+    }
+
+    <button type="submit" [disabled]="viewModel.isLoading()">
+      {{ viewModel.isLoading() ? 'Ingresando...' : 'Ingresar' }}
+    </button>
+  </form>
+</div>

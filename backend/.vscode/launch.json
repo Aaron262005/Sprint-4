@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Sprint4 API (Swagger)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-api",
+      "program": "${workspaceFolder}/src/Sprint4.Backend.API/bin/Debug/net8.0/Sprint4.Backend.API.dll",
+      "cwd": "${workspaceFolder}/src/Sprint4.Backend.API",
+      "env": { "ASPNETCORE_ENVIRONMENT": "Development", "ASPNETCORE_URLS": "https://localhost:7000;http://localhost:5000" },
+      "serverReadyAction": { "action": "openExternally", "pattern": "\\bNow listening on:\\s+(https?://\\S+)", "uriFormat": "%s/swagger" }
+    }
+  ]
+}
