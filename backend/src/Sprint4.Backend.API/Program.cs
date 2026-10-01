@@ -5,6 +5,7 @@ using Sprint4.Backend.Application.Common.Interfaces;
 using Sprint4.Backend.Application.Features.Auth.Commands.Login;
 using Sprint4.Backend.Infrastructure.Repositories;
 using Sprint4.Backend.Infrastructure.Services;
+using Sprint4.Backend.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleMapper, RoleMapper>();
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
+
+// Inyección para tu Historia de Usuario (US11):
+builder.Services.AddScoped<IUserDirectoryRepository, MockUserDirectoryRepository>();
 
 // CQRS: registra automáticamente todos los Command/Query Handlers de Application.
 builder.Services.AddMediatR(cfg =>

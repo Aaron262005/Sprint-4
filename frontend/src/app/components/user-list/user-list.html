@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div style="padding: 20px; font-family: Arial, sans-serif;">
+  <h2>Directorio de Usuarios</h2>
+
+  <!-- Indicador de carga (Escenario 3) -->
+  @if (isLoading) {
+    <div style="text-align: center; padding: 20px; font-weight: bold;">
+      ⏳ Cargando lista de usuarios...
+    </div>
+  }
+
+  <!-- Manejo de error y botón de reintento (Escenario 3) -->
+  @if (hasError) {
+    <div style="text-align: center; padding: 20px; color: red;">
+      <p>❌ Ocurrió un error al descargar la lista de usuarios.</p>
+      <button (click)="cargarUsuarios()" style="padding: 10px 20px; cursor: pointer;">
+        Reintentar conexión
+      </button>
+    </div>
+  }
+
+  <!-- Renderizado de la lista (Escenario 1) -->
+  @if (!isLoading && !hasError) {
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+      <thead>
+        <tr style="background-color: #f2f2f2; border-bottom: 2px solid #ccc;">
+          <th style="padding: 10px;">Nombre Completo</th>
+          <th style="padding: 10px;">Correo Electrónico</th>
+          <th style="padding: 10px;">Teléfono</th>
+          <th style="padding: 10px;">Nombre de Usuario</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of users; track user.id) {
+          <tr style="border-bottom: 1px solid #ddd;">
+            <td style="padding: 10px;">{{ user.fullName || user.name }}</td>
+            <td style="padding: 10px;">{{ user.email }}</td>
+            <td style="padding: 10px;">{{ user.phone }}</td>
+            <td style="padding: 10px;">{{ user.username }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" style="padding: 10px; text-align: center;">No hay registros.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>
+  
+</body>
+</html>
