@@ -1,51 +1,47 @@
+using Sprint4.Backend.Application.Features.Products.Queries.ListProducts;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sprint4.Backend.Application.Common.Constants;
-using Sprint4.Backend.Application.Features.Products.Common;
-using Sprint4.Backend.Application.Features.Products.Queries.GetAllProducts;
+using Sprint4.Backend.Application.Features.Products.Commands.CreateProduct;
+using Sprint4.Backend.Application.Features.Products.Commands.UpdateProduct;
+using Sprint4.Backend.Application.Features.Products.Commands.DeleteProduct;
+using Sprint4.Backend.Application.Features.Products.DTOs;
+using Sprint4.Backend.Application.Features.Products.Queries.GetProduct;
 
-namespace Sprint4.Backend.API.Controllers
+namespace Sprint4.Backend.API.Controllers;
+
+[ApiController]
+[Authorize]
+[Route(AppConstants.Products.Route)]
+public sealed class ProductsController(IMediator mediator) : ControllerBase
 {
-    /// <summary>
-    /// Expone los endpoints HTTP del catálogo de productos (US03).
-    /// El controller NO contiene lógica de negocio: solo traduce la petición HTTP
-    /// a una Query de MediatR (patrón CQRS) y el resultado a una respuesta HTTP.
-    /// [Authorize]: solo usuarios autenticados (Administrador, Cliente o Auditor).
-    ///
-    /// TODO (equipo catálogo): US04 y US05 agregan aquí sus endpoints como Queries nuevas
-    /// (ej. GET categories, GET category/{category}, GET {id}) sin modificar GetAll.
-    /// </summary>
-    [ApiController]
-    [Authorize]
-    [Route(AppConstants.Routes.ProductsBase)]
-    public class ProductsController : ControllerBase
+    [HttpGet]
+    public async Task<IActionResult> List(CancellationToken cancellationToken)
+        => Ok(await mediator.Send(new ListProductsQuery(), cancellationToken));
+
+    [HttpGet(AppConstants.Products.ItemRoute)]
+    public async Task<IActionResult> Get(int id, CancellationToken cancellationToken)
     {
-        private readonly IMediator _mediator;
-
-        public ProductsController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
-        /// <summary>US03: catálogo general de productos.</summary>
-        [HttpGet]
-        [ProducesResponseType(typeof(IReadOnlyList<ProductDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
-        {
-            var result = await _mediator.Send(new GetAllProductsQuery(), cancellationToken);
-
-            if (!result.Success)
-            {
-                // US03 - Escenario 3: el origen de datos no respondió.
-                return StatusCode(StatusCodes.Status503ServiceUnavailable, new { message = result.ErrorMessage });
-            }
-
-            // US03 - Escenario 1: catálogo obtenido correctamente.
-            return Ok(result.Products);
-        }
+        var product = await mediator.Send(new GetProductQuery(id), cancellationToken);
+        return product is null ? NotFound() : Ok(product);
     }
+
+    [HttpPost]
+    [Authorize(Roles = AppConstants.Products.AdminRole)]
+    public async Task<IActionResult> Create(CreateProductDto product, CancellationToken cancellationToken)
+    {
+        var created = await mediator.Send(new CreateProductCommand(product), cancellationToken);
+        return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
+    }
+
+    [HttpPut(AppConstants.Products.ItemRoute)]
+    [Authorize(Roles = AppConstants.Products.AdminRole)]
+    public async Task<IActionResult> Update(int id, UpdateProductDto product, CancellationToken cancellationToken)
+        => Ok(await mediator.Send(new UpdateProductCommand(id, product), cancellationToken));
+
+    [HttpDelete(AppConstants.Products.ItemRoute)]
+    [Authorize(Roles = AppConstants.Products.AdminRole)]
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
+        => Ok(await mediator.Send(new DeleteProductCommand(id), cancellationToken));
 }
