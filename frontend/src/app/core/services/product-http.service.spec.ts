@@ -11,7 +11,7 @@ import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, provideRouter } fr
 
 const data = { title: 'Cuaderno', price: 25, description: 'Azul', image: 'https://example.com/a.jpg', category: 'Escuela' };
 
-describe('Productos: HTTPS, simulación y permisos', () => {
+describe('Productos: HTTPS, datos del backend y permisos', () => {
   const access = { canWrite: vi.fn() };
   beforeEach(() => {
     access.canWrite.mockReturnValue(true);
@@ -28,13 +28,17 @@ describe('Productos: HTTPS, simulación y permisos', () => {
     expect(new URL(request.request.url).protocol).toBe('https:');
     request.flush({ id: 21, ...data });
   });
-  it('conserva la respuesta PUT para mostrarla en detalle sin otro GET', async () => {
+  it('consulta el backend después del PUT para mostrar el dato guardado', async () => {
     const api = TestBed.inject(ProductHttpService);
     const updated = { id: 1, ...data, title: 'Nuevo' };
     const response = firstValueFrom(api.update(1, updated));
     const request = TestBed.inject(HttpTestingController).expectOne(`${APP_CONSTANTS.PRODUCTS.API_URL}/1`);
     expect(request.request.method).toBe('PUT'); request.flush(updated); await response;
-    expect(await firstValueFrom(api.get(1))).toEqual(updated);
+    const detail = firstValueFrom(api.get(1));
+    const get = TestBed.inject(HttpTestingController).expectOne(`${APP_CONSTANTS.PRODUCTS.API_URL}/1`);
+    expect(get.request.method).toBe('GET');
+    get.flush(updated);
+    expect(await detail).toEqual(updated);
   });
   it('bloquea escrituras directas del cliente antes de HttpClient', async () => {
     access.canWrite.mockReturnValue(false);

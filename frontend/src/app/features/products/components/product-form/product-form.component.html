@@ -1,6 +1,5 @@
 <main class="product-page" [attr.aria-busy]="vm.busy()">
   <h1>{{ vm.id() === null ? vm.text.CREATE : vm.text.EDIT }}</h1>
-  <p>{{ vm.text.SIMULATION }}</p>
   @if (vm.error()) { <p role="alert" class="error">{{ vm.error() }}</p> }
   <form [formGroup]="vm.form" (ngSubmit)="vm.save()" novalidate>
     <fieldset [disabled]="vm.busy() || !vm.ready()">

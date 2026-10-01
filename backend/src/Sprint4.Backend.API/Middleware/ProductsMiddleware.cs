@@ -1,3 +1,4 @@
+using Sprint4.Backend.Application.Features.Products;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
@@ -23,12 +24,14 @@ public sealed class ProductsMiddleware(RequestDelegate next)
         try { await next(context); }
         catch (ValidationException exception)
         { await Error(context, StatusCodes.Status400BadRequest, exception.Message); }
-        catch (HttpRequestException)
-        { await Error(context, StatusCodes.Status502BadGateway, AppConstants.Products.ProviderError); }
+        catch (ProductNotFoundException exception)
+        { await Error(context, StatusCodes.Status404NotFound, exception.Message); }
+        catch (IOException)
+        { await Error(context, StatusCodes.Status500InternalServerError, AppConstants.Products.StorageError); }
+        catch (UnauthorizedAccessException)
+        { await Error(context, StatusCodes.Status500InternalServerError, AppConstants.Products.StorageError); }
         catch (JsonException)
-        { await Error(context, StatusCodes.Status502BadGateway, AppConstants.Products.ProviderError); }
-        catch (OperationCanceledException) when (!context.RequestAborted.IsCancellationRequested)
-        { await Error(context, StatusCodes.Status504GatewayTimeout, AppConstants.Products.ProviderError); }
+        { await Error(context, StatusCodes.Status500InternalServerError, AppConstants.Products.StorageError); }
     }
 
     private static Task Error(HttpContext context, int status, string message)

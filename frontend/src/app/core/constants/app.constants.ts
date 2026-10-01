@@ -36,8 +36,8 @@ export const APP_CONSTANTS = {
       TITLE: 'Título', PRICE: 'Precio', DESCRIPTION: 'Descripción',
       IMAGE: 'URL de imagen HTTPS', CATEGORY: 'Categoría',
       SAVE: 'Guardar', DELETE: 'Eliminar', BACK: 'Volver', LOADING: 'Procesando…',
-      CREATED: 'Producto creado (Simulación). ID: ',
-      UPDATED: 'Producto actualizado (Simulación)', DELETED: 'Producto eliminado (Simulación)',
+      CREATED: 'Producto creado. ID: ',
+      UPDATED: 'Producto actualizado', DELETED: 'Producto eliminado',
       CONFIRM_DELETE: '¿Estás seguro de eliminar este producto?',
       ERROR: 'No se pudo completar la solicitud. Revisa tu conexión e intenta de nuevo.',
       FORBIDDEN: 'No tienes permiso para realizar esta acción.',
@@ -45,7 +45,6 @@ export const APP_CONSTANTS = {
       REQUIRED: 'Completa este campo.', PRICE_ERROR: 'Escribe un precio entre 0.01 y 999999999.',
       IMAGE_ERROR: 'Escribe una URL HTTPS válida.', INVALID_ID: 'El identificador no es válido.',
       HTTPS_ERROR: 'La conexión con la API debe utilizar HTTPS.',
-      SIMULATION: 'Simulación: Fake Store no guarda estos cambios en su servidor.',
     },
   },
   STORAGE_KEYS: {

@@ -1,3 +1,4 @@
+using Sprint4.Backend.Application.Features.Products.Queries.ListProducts;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,10 @@ namespace Sprint4.Backend.API.Controllers;
 [Route(AppConstants.Products.Route)]
 public sealed class ProductsController(IMediator mediator) : ControllerBase
 {
+    [HttpGet]
+    public async Task<IActionResult> List(CancellationToken cancellationToken)
+        => Ok(await mediator.Send(new ListProductsQuery(), cancellationToken));
+
     [HttpGet(AppConstants.Products.ItemRoute)]
     public async Task<IActionResult> Get(int id, CancellationToken cancellationToken)
     {

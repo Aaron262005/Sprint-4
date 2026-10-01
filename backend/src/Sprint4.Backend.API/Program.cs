@@ -1,3 +1,4 @@
+using Sprint4.Backend.Infrastructure.Persistence;
 using Sprint4.Backend.Application.Common.Constants;
 using Sprint4.Backend.API.Middleware;
 using System.Text;
@@ -24,13 +25,13 @@ builder.Services.AddScoped<ITokenService, JwtTokenService>();
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(LoginCommand).Assembly));
 
-builder.Services.AddHttpClient<FakeStoreApiService>(client =>
-{
-    client.BaseAddress = new Uri(AppConstants.Products.ProviderUrl);
-    client.Timeout = TimeSpan.FromSeconds(AppConstants.Products.TimeoutSeconds);
-}).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { AllowAutoRedirect = false });
-builder.Services.AddScoped<IProductReader>(services => services.GetRequiredService<FakeStoreApiService>());
-builder.Services.AddScoped<IProductWriter>(services => services.GetRequiredService<FakeStoreApiService>());
+// La ruta se puede configurar sin cambiar el contrato del repositorio.
+var productFile = builder.Configuration[AppConstants.Products.StoragePathKey]
+    ?? Path.Combine(builder.Environment.ContentRootPath,
+        AppConstants.Products.DataDirectory, AppConstants.Products.DataFile);
+builder.Services.AddSingleton(_ => new JsonProductRepository(productFile));
+builder.Services.AddSingleton<IProductReader>(services => services.GetRequiredService<JsonProductRepository>());
+builder.Services.AddSingleton<IProductWriter>(services => services.GetRequiredService<JsonProductRepository>());
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

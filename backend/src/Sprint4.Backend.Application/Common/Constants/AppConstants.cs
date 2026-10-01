@@ -19,19 +19,21 @@ namespace Sprint4.Backend.Application.Common.Constants
         {
             public const string Route = "products";
             public const string ItemRoute = "{id:int}";
-            public const string ProviderUrl = "https://fakestoreapi.com/";
             public const string AdminRole = "Administrador";
             public const string Required = "Este campo es obligatorio.";
             public const string InvalidPrice = "El precio debe ser un número mayor que cero.";
             public const string InvalidImage = "La imagen debe tener una URL HTTPS válida.";
             public const string InvalidId = "El identificador debe ser mayor que cero.";
             public const string NotFound = "No se encontró el producto.";
-            public const string ProviderError = "No se pudo completar la solicitud. Intenta de nuevo.";
+            public const string StorageError = "No se pudo completar la solicitud. Intenta de nuevo.";
             public const string HttpsRequired = "Debes utilizar HTTPS.";
             public const string HttpsScheme = "https";
             public const string MinimumPrice = "0.01";
             public const string MaximumPrice = "999999999";
-            public const int TimeoutSeconds = 20;
+            public const string StoragePathKey = "Products:StoragePath";
+            public const string DataDirectory = "App_Data";
+            public const string DataFile = "products.json";
+            public const string TemporaryExtension = ".tmp";
         }
 
         /// <summary>Rutas HTTP expuestas por los controllers.</summary>

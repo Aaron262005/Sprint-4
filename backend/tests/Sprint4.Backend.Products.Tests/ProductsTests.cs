@@ -129,6 +129,7 @@ public sealed class ProductsTests
     private sealed class Store : IProductReader, IProductWriter
     {
         public int Writes { get; private set; }
+        public Task<IReadOnlyList<Product>> ListAsync(CancellationToken ct) => Task.FromResult<IReadOnlyList<Product>>([Product(1)]);
         public Task<Product?> GetAsync(int id, CancellationToken ct) => Task.FromResult<Product?>(Product(id));
         public Task<Product> CreateAsync(CreateProductDto p, CancellationToken ct) { Writes++; return Task.FromResult(Product(21)); }
         public Task<Product> UpdateAsync(int id, UpdateProductDto p, CancellationToken ct) { Writes++; return Task.FromResult(Product(id)); }
