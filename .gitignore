@@ -427,3 +427,6 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Datos locales del inventario; no se versionan.
+backend/src/Sprint4.Backend.API/App_Data/

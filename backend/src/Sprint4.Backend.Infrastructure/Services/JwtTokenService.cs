@@ -26,8 +26,8 @@ namespace Sprint4.Backend.Infrastructure.Services
         public string GenerateToken(int userId, string username, UserRole role)
         {
             var section = _configuration.GetSection(AppConstants.Jwt.SectionName);
-            var key = section["Key"] ?? "clave-temporal-de-desarrollo-cambiar-en-produccion";
-            var expirationMinutes = int.TryParse(section["ExpirationMinutes"], out var minutes)
+            var key = section[AppConstants.Jwt.KeyName] ?? throw new InvalidOperationException(AppConstants.Jwt.MissingKey);
+            var expirationMinutes = int.TryParse(section[AppConstants.Jwt.ExpirationName], out var minutes)
                 ? minutes
                 : AppConstants.Jwt.ExpirationMinutes;
 

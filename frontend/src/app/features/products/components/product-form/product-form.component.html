@@ -1,0 +1,40 @@
+<main class="product-page" [attr.aria-busy]="vm.busy()">
+  <h1>{{ vm.id() === null ? vm.text.CREATE : vm.text.EDIT }}</h1>
+  @if (vm.error()) { <p role="alert" class="error">{{ vm.error() }}</p> }
+  <form [formGroup]="vm.form" (ngSubmit)="vm.save()" novalidate>
+    <fieldset [disabled]="vm.busy() || !vm.ready()">
+      <label for="title">{{ vm.text.TITLE }}</label>
+      <input id="title" formControlName="title" [attr.aria-invalid]="vm.form.controls.title.touched && vm.form.controls.title.invalid" aria-describedby="title-error" required type="text">
+      @if (vm.form.controls.title.touched && vm.form.controls.title.invalid) {
+        <small id="title-error" class="error">{{ vm.text.REQUIRED }}</small>
+      }
+      <label for="price">{{ vm.text.PRICE }}</label>
+      <input id="price" formControlName="price" [attr.aria-invalid]="vm.form.controls.price.touched && vm.form.controls.price.invalid" aria-describedby="price-error" required type="number" inputmode="decimal" step="0.01">
+      @if (vm.form.controls.price.touched && vm.form.controls.price.invalid) {
+        <small id="price-error" class="error">{{ vm.text.PRICE_ERROR }}</small>
+      }
+      <label for="description">{{ vm.text.DESCRIPTION }}</label>
+      <textarea id="description" formControlName="description" [attr.aria-invalid]="vm.form.controls.description.touched && vm.form.controls.description.invalid" aria-describedby="description-error" required rows="4"></textarea>
+      @if (vm.form.controls.description.touched && vm.form.controls.description.invalid) {
+        <small id="description-error" class="error">{{ vm.text.REQUIRED }}</small>
+      }
+      <label for="image">{{ vm.text.IMAGE }}</label>
+      <input id="image" formControlName="image" [attr.aria-invalid]="vm.form.controls.image.touched && vm.form.controls.image.invalid" aria-describedby="image-error" required type="url">
+      @if (vm.form.controls.image.touched && vm.form.controls.image.invalid) {
+        <small id="image-error" class="error">{{ vm.text.IMAGE_ERROR }}</small>
+      }
+      <label for="category">{{ vm.text.CATEGORY }}</label>
+      <input id="category" formControlName="category" [attr.aria-invalid]="vm.form.controls.category.touched && vm.form.controls.category.invalid" aria-describedby="category-error" required type="text">
+      @if (vm.form.controls.category.touched && vm.form.controls.category.invalid) {
+        <small id="category-error" class="error">{{ vm.text.REQUIRED }}</small>
+      }
+    </fieldset>
+    <div class="actions">
+      <button type="submit" [disabled]="vm.busy() || !vm.ready()">
+        @if (vm.busy()) { <span class="spinner" aria-hidden="true"></span> }
+        {{ vm.busy() ? vm.text.LOADING : vm.text.SAVE }}
+      </button>
+      <button type="button" [disabled]="vm.busy()" (click)="vm.back()">{{ vm.text.BACK }}</button>
+    </div>
+  </form>
+</main>
