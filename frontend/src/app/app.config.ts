@@ -1,3 +1,7 @@
+import { PRODUCT_READER, PRODUCT_WRITER } from './core/services/product-api.interface';
+import { ProductHttpService } from './core/services/product-http.service';
+import { PRODUCT_FEEDBACK } from './core/services/product-feedback.interface';
+import { BrowserProductFeedbackService } from './core/services/browser-product-feedback.service';
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -12,6 +16,10 @@ import { ISessionStorageService, BrowserSessionStorageService } from './core/ser
  */
 export const appConfig: ApplicationConfig = {
   providers: [
+    ProductHttpService,
+    { provide: PRODUCT_READER, useExisting: ProductHttpService },
+    { provide: PRODUCT_WRITER, useExisting: ProductHttpService },
+    { provide: PRODUCT_FEEDBACK, useClass: BrowserProductFeedbackService },
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
     { provide: ISessionStorageService, useClass: BrowserSessionStorageService },

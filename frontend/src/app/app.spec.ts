@@ -1,24 +1,15 @@
 import { TestBed } from '@angular/core/testing';
+import { signal } from '@angular/core';
 import { App } from './app';
+import { PRODUCT_FEEDBACK } from './core/services/product-feedback.interface';
 
 describe('App', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [App],
-    })
-      .compileComponents();
-  });
-
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it('should render title', async () => {
+  it('mantiene el aviso de producto fuera de las pantallas que cambian', async () => {
+    await TestBed.configureTestingModule({ imports: [App], providers: [
+      { provide: PRODUCT_FEEDBACK, useValue: { message: signal('Producto actualizado (Simulación)') } },
+    ] }).compileComponents();
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, frontend');
+    expect(fixture.nativeElement.querySelector('[role="status"]').textContent).toContain('Producto actualizado');
   });
 });

@@ -1,0 +1,26 @@
+<main class="product-page" [attr.aria-busy]="vm.busy()">
+  <h1>{{ vm.text.DETAIL }}</h1>
+  <p>{{ vm.text.SIMULATION }}</p>
+  @if (vm.error()) { <p role="alert" class="error">{{ vm.error() }}</p> }
+  @if (vm.busy()) {
+    <p role="status"><span class="spinner" aria-hidden="true"></span>{{ vm.text.LOADING }}</p>
+  }
+  @if (vm.product(); as product) {
+    <article>
+      <img [src]="product.image" [alt]="product.title" referrerpolicy="no-referrer">
+      <h2>{{ product.title }}</h2>
+      <p>{{ product.description }}</p>
+      <dl>
+        <dt>{{ vm.text.PRICE }}</dt><dd>{{ product.price | number:'1.2-2' }}</dd>
+        <dt>{{ vm.text.CATEGORY }}</dt><dd>{{ product.category }}</dd>
+      </dl>
+      @if (vm.canWrite()) {
+        <div class="actions">
+          <button [disabled]="vm.busy()" (click)="vm.edit()">{{ vm.text.EDIT }}</button>
+          <button class="danger" [disabled]="vm.busy()" (click)="vm.remove()">{{ vm.text.DELETE }}</button>
+        </div>
+      }
+    </article>
+  }
+  <button [disabled]="vm.busy()" (click)="vm.back()">{{ vm.text.BACK }}</button>
+</main>
