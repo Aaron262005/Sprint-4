@@ -13,7 +13,7 @@ export const APP_CONSTANTS = {
       LOGOUT: '/auth/logout',
     },
     // TODO (equipo catálogo/carrito/usuarios): agreguen aquí sus propias rutas,
-    // ej. PRODUCTS: '/products', CARTS: '/carts', USERS: '/users'
+    // ej. CARTS: '/carts', USERS: '/users'
   },
   PRODUCTS: {
     // El backend conserva /api/auth y expone los endpoints solicitados en /products.
@@ -59,5 +59,14 @@ export const APP_CONSTANTS = {
   ERROR_MESSAGES: {
     INVALID_CREDENTIALS: 'Usuario o contraseña inválidos',
     NO_CONNECTION: 'No hay conexión a internet. Verifica tu red e intenta de nuevo.',
+    CATALOG_LOAD_FAILED: 'No pudimos cargar el catálogo. Revisa tu conexión e intenta de nuevo.',
+  },
+  // US03: textos fijos de la vista del catálogo (los productos vienen de GET /products).
+  CATALOG: {
+    TITLE: 'Catálogo de productos',
+    LOADING: 'Cargando productos...',
+    EMPTY: 'Todavía no hay productos en el catálogo.',
+    RETRY: 'Reintentar',
+    CURRENCY_CODE: 'USD',
   },
 } as const;

@@ -1,0 +1,52 @@
+<section class="catalog" aria-labelledby="catalog-title">
+  <h2 id="catalog-title" class="catalog__title">{{ texts.TITLE }}</h2>
+
+  @switch (viewModel.status()) {
+    @case (catalogStatus.Loading) {
+      <!-- US03 - Escenario 2: indicador de carga centrado -->
+      <div class="catalog__state" role="status" aria-live="polite">
+        <span class="catalog__spinner" aria-hidden="true"></span>
+        <p>{{ texts.LOADING }}</p>
+      </div>
+    }
+
+    @case (catalogStatus.Error) {
+      <!-- US03 - Escenario 3: mensaje amigable + botón Reintentar -->
+      <div class="catalog__state catalog__state--error" role="alert">
+        <p>{{ viewModel.errorMessage() }}</p>
+        <button type="button" class="catalog__retry" (click)="onRetry()">
+          {{ texts.RETRY }}
+        </button>
+      </div>
+    }
+
+    @case (catalogStatus.Loaded) {
+      <!-- US03 - Escenario 1: cuadrícula con imagen, título y precio -->
+      @if (viewModel.isEmpty()) {
+        <p class="catalog__state">{{ texts.EMPTY }}</p>
+      } @else {
+        <ul class="catalog__grid">
+          @for (product of viewModel.products(); track product.id) {
+            <li>
+              <article class="product-card">
+                <img
+                  class="product-card__image"
+                  [src]="product.image"
+                  [alt]="product.title"
+                  loading="lazy"
+                  decoding="async"
+                  width="160"
+                  height="160"
+                />
+                <h3 class="product-card__title" [title]="product.title">{{ product.title }}</h3>
+                <p class="product-card__price">
+                  {{ product.price | currency: texts.CURRENCY_CODE }}
+                </p>
+              </article>
+            </li>
+          }
+        </ul>
+      }
+    }
+  }
+</section>
