@@ -12,8 +12,12 @@ export const APP_CONSTANTS = {
       LOGIN: '/auth/login',
       LOGOUT: '/auth/logout',
     },
+    // US03: catálogo general de productos.
+    PRODUCTS: {
+      ALL: '/products',
+    },
     // TODO (equipo catálogo/carrito/usuarios): agreguen aquí sus propias rutas,
-    // ej. PRODUCTS: '/products', CARTS: '/carts', USERS: '/users'
+    // ej. CARTS: '/carts', USERS: '/users'
   },
   STORAGE_KEYS: {
     TOKEN: 'sprint4_token',
@@ -27,5 +31,14 @@ export const APP_CONSTANTS = {
   ERROR_MESSAGES: {
     INVALID_CREDENTIALS: 'Usuario o contraseña inválidos',
     NO_CONNECTION: 'No hay conexión a internet. Verifica tu red e intenta de nuevo.',
+    CATALOG_LOAD_FAILED: 'No pudimos cargar el catálogo. Revisa tu conexión e intenta de nuevo.',
+  },
+  // US03: textos fijos de la vista del catálogo.
+  CATALOG: {
+    TITLE: 'Catálogo de productos',
+    LOADING: 'Cargando productos...',
+    EMPTY: 'No hay productos disponibles por ahora.',
+    RETRY: 'Reintentar',
+    CURRENCY_CODE: 'USD',
   },
 } as const;

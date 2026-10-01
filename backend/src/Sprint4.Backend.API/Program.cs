@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Sprint4.Backend.Application.Common.Constants;
 using Sprint4.Backend.Application.Common.Interfaces;
 using Sprint4.Backend.Application.Features.Auth.Commands.Login;
 using Sprint4.Backend.Infrastructure.Repositories;
@@ -17,6 +18,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleMapper, RoleMapper>();
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
+
+// US03: IProductRepository -> FakeStoreProductRepository, con un HttpClient ya configurado
+// (URL base, tiempo de espera y User-Agent salen de AppConstants, no de literales sueltos).
+builder.Services.AddHttpClient<IProductRepository, FakeStoreProductRepository>(client =>
+{
+    client.BaseAddress = new Uri(AppConstants.ExternalApis.FakeStore.BaseUrl);
+    client.Timeout = TimeSpan.FromSeconds(AppConstants.ExternalApis.FakeStore.TimeoutSeconds);
+    client.DefaultRequestHeaders.UserAgent.ParseAdd(AppConstants.ExternalApis.FakeStore.UserAgent);
+});
 
 // CQRS: registra automáticamente todos los Command/Query Handlers de Application.
 builder.Services.AddMediatR(cfg =>

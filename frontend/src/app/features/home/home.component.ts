@@ -3,17 +3,16 @@ import { CommonModule } from '@angular/common';
 import { APP_CONSTANTS } from '../../core/constants/app.constants';
 import { AuthViewModel } from '../../core/view-models/auth.view-model';
 import { UserRole } from '../../core/models/user-role.enum';
+import { CatalogComponent } from '../catalog/catalog.component';
 
 /**
- * Pantalla principal MOCK. Sirve para validar el flujo de login/logout y para que
- * el equipo vea dónde debe "engancharse" cada historia de usuario.
- *
- * TODO (equipo catálogo): reemplazar el contenido de esta vista por el catálogo real (US03).
+ * Pantalla principal. Valida el flujo de login/logout y muestra el catálogo
+ * general de productos (US03) a través de <app-catalog />.
  */
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CatalogComponent],
   templateUrl: './home.component.html',
 })
 export class HomeComponent {

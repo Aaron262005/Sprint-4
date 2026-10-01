@@ -4,6 +4,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { ISessionStorageService, BrowserSessionStorageService } from './core/services/storage.service';
+import { IProductApiService, HttpProductApiService } from './core/services/product-api.service';
 
 /**
  * Composición de dependencias del frontend (equivalente a Program.cs en el backend).
@@ -15,5 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
     { provide: ISessionStorageService, useClass: BrowserSessionStorageService },
+    // US03: catálogo de productos.
+    { provide: IProductApiService, useClass: HttpProductApiService },
   ],
 };
